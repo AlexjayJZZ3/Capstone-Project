@@ -1,9 +1,11 @@
 function love.load()
 	whale = love.graphics.newImage("asteroid-icon.png")
+	whale1 = love.graphics.newImage("win.png")
 	arenaWidth = 800
     arenaHeight = 600
     bulletRadius = 5
     shipRadius = 30
+    game_over = false
     asteroidStages = {
         {
             speed = 120,
@@ -162,11 +164,16 @@ function love.update(dt)
         end
     end
 	if #asteroids == 0 then
+		game_over = true
+		love.timer.sleep(3)
         reset()
     end
 end
 
 function love.draw()
+	if game_over == true then
+		love.graphics.draw(whale1,0,0)
+    end
 	for y = -1, 1 do
         for x = -1, 1 do
             love.graphics.origin()
