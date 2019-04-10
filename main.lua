@@ -1,11 +1,13 @@
 function love.load()
 	whale = love.graphics.newImage("asteroid-icon.png")
 	whale1 = love.graphics.newImage("win.png")
+	whale2 = love.graphics.newImage("over.png")
 	arenaWidth = 800
     arenaHeight = 600
     bulletRadius = 5
     shipRadius = 30
     game_over = false
+    game_lose = false
     gameOverWaitTime = 100
     asteroidStages = {
         {
@@ -76,6 +78,13 @@ function love.update(dt)
     if gameOverWaitTime == 0 then
         gameOverWaitTime = 100
         game_over = false
+    end
+    if game_lose then
+        gameOverWaitTime = gameOverWaitTime - 1
+    end
+    if gameOverWaitTime == 0 then
+        gameOverWaitTime = 100
+        game_lose = false
     end
 	local turnSpeed = 10
     if love.keyboard.isDown('right') then
@@ -151,6 +160,7 @@ function love.update(dt)
         asteroid.y = (asteroid.y + math.sin(asteroid.angle) * asteroidStages[asteroid.stage].speed * dt) % arenaHeight
 
         if areCirclesIntersecting(shipX, shipY, shipRadius, asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius) then
+        	game_lose = true
             reset()
             break
         end
@@ -179,13 +189,16 @@ function love.draw()
 	if game_over == true then
 		--love.graphics.draw(whale1,800,600)
 		love.graphics.draw(whale1, 100,100,0, love.graphics.getWidth()/love.graphics.getWidth(), love.graphics.getHeight()/love.graphics.getHeight())
-		love.graphics.print("lol")
 		--[[for i = 0, love.graphics.getWidth() / whale1:getWidth() do
         	for j = 0, love.graphics.getHeight() / whale1:getHeight() do
             	love.graphics.draw(whale1, i * whale1:getWidth(), j * whale1:getHeight())
         	end
     	end]]
     end
+    if game_lose == true then
+		--love.graphics.draw(whale1,800,600)
+		love.graphics.draw(whale2, 175,120,0, love.graphics.getWidth()/love.graphics.getWidth(), love.graphics.getHeight()/love.graphics.getHeight())
+	end	
 	for y = -1, 1 do
         for x = -1, 1 do
             love.graphics.origin()
