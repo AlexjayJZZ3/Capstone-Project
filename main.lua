@@ -6,24 +6,25 @@ function love.load()
     bulletRadius = 5
     shipRadius = 30
     game_over = false
+    gameOverWaitTime = 100
     asteroidStages = {
         {
             speed = 120,
             radius = 15,
-            xsize = 0.125,
-            ysize = 0.125
+            xsize = 0.2,
+            ysize = 0.2
         },
         {
             speed = 70,
             radius = 30,
-            xsize = 0.25,
-            ysize = 0.25
+            xsize = 0.4,
+            ysize = 0.4
         },
         {
             speed = 50,
             radius = 50,
-            xsize = 0.5,
-            ysize = 0.5
+            xsize = 0.6,
+            ysize = 0.6
         },
         {
             speed = 20,
@@ -33,7 +34,6 @@ function love.load()
         }
     }
 	function reset()
-
     	shipX = arenaWidth / 2
     	shipY = arenaHeight / 2
 
@@ -66,11 +66,17 @@ function love.load()
         end	
     end
     reset()
-    
 end
 
 function love.update(dt)
     -- etc.
+    if game_over then
+        gameOverWaitTime = gameOverWaitTime - 1
+    end
+    if gameOverWaitTime == 0 then
+        gameOverWaitTime = 100
+        game_over = false
+    end
 	local turnSpeed = 10
     if love.keyboard.isDown('right') then
          shipAngle = (shipAngle + turnSpeed * dt) % (2 * math.pi)
@@ -165,14 +171,20 @@ function love.update(dt)
     end
 	if #asteroids == 0 then
 		game_over = true
-		love.timer.sleep(3)
         reset()
     end
 end
 
 function love.draw()
 	if game_over == true then
-		love.graphics.draw(whale1,0,0)
+		--love.graphics.draw(whale1,800,600)
+		love.graphics.draw(whale1, 100,100,0, love.graphics.getWidth()/love.graphics.getWidth(), love.graphics.getHeight()/love.graphics.getHeight())
+		love.graphics.print("lol")
+		--[[for i = 0, love.graphics.getWidth() / whale1:getWidth() do
+        	for j = 0, love.graphics.getHeight() / whale1:getHeight() do
+            	love.graphics.draw(whale1, i * whale1:getWidth(), j * whale1:getHeight())
+        	end
+    	end]]
     end
 	for y = -1, 1 do
         for x = -1, 1 do
