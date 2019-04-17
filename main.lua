@@ -36,6 +36,20 @@ function love.load()
         }
     }
 	function reset()
+		if game_over then
+        	gameOverWaitTime = gameOverWaitTime - 1
+    	end
+   	 	if gameOverWaitTime == 0 then
+        	gameOverWaitTime = 100
+        	game_over = false
+    	end
+    	if game_lose then
+        	gameOverWaitTime = gameOverWaitTime - 1
+   	 	end
+    	if gameOverWaitTime == 0 then
+        	gameOverWaitTime = 100
+        	game_lose = false
+    	end
     	shipX = arenaWidth / 2
     	shipY = arenaHeight / 2
 
@@ -217,10 +231,10 @@ function love.draw()
                 love.graphics.circle('fill', bullet.x, bullet.y, bulletRadius)
             end   
             for asteroidIndex, asteroid in ipairs(asteroids) do
-            	love.graphics.draw(whale, asteroid.x, asteroid.y, 0, asteroidStages[asteroid.stage].xsize, asteroidStages[asteroid.stage].ysize)   
+            	love.graphics.draw(whale, asteroid.x, asteroid.y, 0, asteroidStages[asteroid.stage].xsize, asteroidStages[asteroid.stage].ysize) 
+            	--love.graphics.circle('fill', asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius)     
             	--love.graphics.draw(whale, asteroid.x, asteroid.y, 0,50, 50) 
-                love.graphics.setColor(1, 1, 1)
-                --love.graphics.circle('fill', asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius)    
+                love.graphics.setColor(1, 1, 1)   
             end
         end
     end
