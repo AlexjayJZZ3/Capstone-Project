@@ -36,7 +36,7 @@ function love.load()
         }
     }
 	function reset()
-		if game_over then
+		--[[if game_over then
         	gameOverWaitTime = gameOverWaitTime - 1
     	end
    	 	if gameOverWaitTime == 0 then
@@ -49,7 +49,7 @@ function love.load()
     	if gameOverWaitTime == 0 then
         	gameOverWaitTime = 100
         	game_lose = false
-    	end
+    	end]]
     	shipX = arenaWidth / 2
     	shipY = arenaHeight / 2
 
@@ -169,18 +169,7 @@ function love.update(dt)
             end	
         end
 	end   
-	for asteroidIndex, asteroid in ipairs(asteroids) do
-        asteroid.x = (asteroid.x + math.cos(asteroid.angle) * asteroidStages[asteroid.stage].speed * dt) % arenaWidth
-        asteroid.y = (asteroid.y + math.sin(asteroid.angle) * asteroidStages[asteroid.stage].speed * dt) % arenaHeight
-
-        if areCirclesIntersecting(shipX, shipY, shipRadius, asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius) then
-        	game_lose = true
-            reset()
-            break
-        end
-    end
-
-    bulletTimer = bulletTimer + dt
+ 	bulletTimer = bulletTimer + dt
     if love.keyboard.isDown('s') then
         if bulletTimer >= 0.5 then
             bulletTimer = 0
@@ -192,7 +181,20 @@ function love.update(dt)
                 timeLeft = 4,
             })
         end
+    end	
+	for asteroidIndex, asteroid in ipairs(asteroids) do
+        asteroid.x = (asteroid.x + math.cos(asteroid.angle) * asteroidStages[asteroid.stage].speed * dt) % arenaWidth
+        asteroid.y = (asteroid.y + math.sin(asteroid.angle) * asteroidStages[asteroid.stage].speed * dt) % arenaHeight
+
+        if areCirclesIntersecting(shipX, shipY, shipRadius, asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius) then
+        --if areCirclesIntersecting(shipX, shipY, shipRadius, asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius) then	
+        	game_lose = true
+            reset()
+            break
+        end
     end
+
+   
 	if #asteroids == 0 then
 		game_over = true
         reset()
@@ -217,12 +219,16 @@ function love.draw()
         for x = -1, 1 do
             love.graphics.origin()
             love.graphics.translate(x * arenaWidth, y * arenaHeight)
-    love.graphics.setColor(0, 0, 1)
-    love.graphics.circle('fill', shipX, shipY, shipRadius)
+    		love.graphics.setColor(0, 0, 1)
+    		love.graphics.circle('fill', shipX, shipY, shipRadius)
 
-    love.graphics.setColor(0, 1, 1)
-    --local shipCircleDistance = 20
-    love.graphics.circle('fill', shipX + math.cos(shipAngle) * 20, shipY + math.sin(shipAngle) * 20, 5)
+    		love.graphics.setColor(0, 1, 1)
+    		local shipCircleDistance = 20
+    		love.graphics.circle('fill', 
+    			shipX + math.cos(shipAngle) * shipCircleDistance,
+  				shipY + math.sin(shipAngle) * shipCircleDistance, 
+  				5
+  			)
 
             -- etc.
 
@@ -233,8 +239,7 @@ function love.draw()
             for asteroidIndex, asteroid in ipairs(asteroids) do
             	love.graphics.draw(whale, asteroid.x, asteroid.y, 0, asteroidStages[asteroid.stage].xsize, asteroidStages[asteroid.stage].ysize) 
             	--love.graphics.circle('fill', asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius)     
-            	--love.graphics.draw(whale, asteroid.x, asteroid.y, 0,50, 50) 
-                love.graphics.setColor(1, 1, 1)   
+                love.graphics.setColor(1, 1, 0)   
             end
         end
     end
