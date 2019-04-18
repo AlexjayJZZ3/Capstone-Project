@@ -12,27 +12,27 @@ function love.load()
     asteroidStages = {
         {
             speed = 120,
-            radius = 15,
+            radius = 20,
             xsize = 0.2,
             ysize = 0.2
         },
         {
             speed = 70,
-            radius = 30,
+            radius = 40,
             xsize = 0.4,
             ysize = 0.4
         },
         {
             speed = 50,
-            radius = 50,
+            radius = 80,
             xsize = 0.6,
             ysize = 0.6
         },
         {
             speed = 20,
-            radius = 80,
-            xsize = 1,
-            ysize = 1
+            radius = 100,
+            xsize = 0.7,
+            ysize = 0.7
         }
     }
 	function reset()
@@ -237,9 +237,9 @@ function love.draw()
                 love.graphics.circle('fill', bullet.x, bullet.y, bulletRadius)
             end   
             for asteroidIndex, asteroid in ipairs(asteroids) do
+                love.graphics.setColor(1, 1, 1)
             	love.graphics.draw(whale, asteroid.x, asteroid.y, 0, asteroidStages[asteroid.stage].xsize, asteroidStages[asteroid.stage].ysize) 
-            	--love.graphics.circle('fill', asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius)     
-                love.graphics.setColor(1, 1, 0)   
+            	--love.graphics.circle('fill', asteroid.x, asteroid.y, asteroidStages[asteroid.stage].radius)            
             end
         end
     end
